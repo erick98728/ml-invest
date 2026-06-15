@@ -177,6 +177,22 @@ A primeira versão ideal do protótipo deve apresentar uma experiência navegáv
 
 Nessa fase, o protótipo deve provar que o ML-Invest é útil mesmo com dados simulados ou preenchidos manualmente. O foco deve ser validar a clareza da proposta, a utilidade das telas, a compreensão dos diagnósticos e a sensação de organização para usuários iniciantes.
 
+
+## Documentos de produto
+
+- [Guia de identidade visual e experiência](docs/guia-identidade-visual-experiencia.md)
+- [Arquitetura inicial das páginas](docs/arquitetura-paginas.md)
+- [Componentes reutilizáveis](docs/componentes-reutilizaveis.md)
+- [Especificação do dashboard financeiro](docs/especificacao-dashboard-financeiro.md)
+- [Especificação das áreas operacionais](docs/especificacao-areas-operacionais.md)
+- [Especificação do plano financeiro educativo](docs/especificacao-plano-financeiro-educativo.md)
+- [Especificação de relatórios e gráficos](docs/especificacao-relatorios-graficos.md)
+- [Dados demonstrativos do protótipo](docs/dados-demonstrativos-prototipo.md)
+- [Responsividade e usabilidade mobile](docs/responsividade-usabilidade-mobile.md)
+- [Documentação conceitual consolidada](docs/documentacao-conceitual.md)
+- [Revisão final do planejamento](docs/revisao-final-planejamento.md)
+- [Análise para escolha técnica futura](docs/analise-escolha-tecnica-futura.md)
+
 ## Resumo final
 
 - **Essência do ML-Invest:** uma plataforma educativa e visual para organização financeira pessoal, criada para ajudar usuários a entenderem receitas, despesas, dívidas, metas e saldo mensal com clareza.
