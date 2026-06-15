@@ -188,6 +188,7 @@ Nessa fase, o protótipo deve provar que o ML-Invest é útil mesmo com dados si
 - [Especificação do plano financeiro educativo](docs/especificacao-plano-financeiro-educativo.md)
 - [Especificação de relatórios e gráficos](docs/especificacao-relatorios-graficos.md)
 - [Dados demonstrativos do protótipo](docs/dados-demonstrativos-prototipo.md)
+- [Responsividade e usabilidade mobile](docs/responsividade-usabilidade-mobile.md)
 
 ## Resumo final
 
