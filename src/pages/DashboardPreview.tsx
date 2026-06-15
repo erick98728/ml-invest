@@ -49,11 +49,11 @@ export function DashboardPreview() {
   const featuredGoal = demoProfile.goals[0];
 
   return (
-    <main className="app-shell">
-      <section className="hero" aria-labelledby="page-title">
+    <section className="page-shell dashboard-page" aria-labelledby="active-page-title">
+      <section className="hero" aria-labelledby="active-page-title">
         <div>
           <p className="eyebrow">Protótipo frontend/local</p>
-          <h1 id="page-title">ML-Invest</h1>
+          <h1 id="active-page-title">Dashboard financeiro</h1>
           <p className="hero__text">
             Organize receitas, despesas, dívidas e metas para entender seu mês com clareza,
             simplicidade e orientação educativa.
@@ -65,7 +65,7 @@ export function DashboardPreview() {
             </button>
           </div>
         </div>
-        <span className="demo-badge">{demoProfile.name} · {demoProfile.period}</span>
+        <span className="demo-badge">{demoProfile.period}</span>
       </section>
 
       <Notice title="Dados demonstrativos">
@@ -188,6 +188,6 @@ export function DashboardPreview() {
           ))}
         </ul>
       </section>
-    </main>
+    </section>
   );
 }
