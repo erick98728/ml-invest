@@ -458,10 +458,10 @@ A evolução mensal deve mostrar tendências simples, sem prever futuro.
 
 - Período: Junho demonstrativo.
 - Total de receitas: R$ 5.000,00.
-- Total de despesas: R$ 4.500,00.
-- Saldo estimado: R$ 500,00.
-- Porcentagem poupada estimada: 10%.
-- Comprometimento da renda: 90%.
+- Total de despesas: R$ 4.800,00.
+- Saldo estimado: R$ 200,00.
+- Porcentagem poupada estimada: 4%.
+- Comprometimento da renda: 96%.
 - Dívidas em aberto: 3.
 - Dívida atrasada: 1.
 - Meta de reserva: não cadastrada no cenário inicial.

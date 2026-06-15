@@ -190,6 +190,7 @@ Nessa fase, o protótipo deve provar que o ML-Invest é útil mesmo com dados si
 - [Dados demonstrativos do protótipo](docs/dados-demonstrativos-prototipo.md)
 - [Responsividade e usabilidade mobile](docs/responsividade-usabilidade-mobile.md)
 - [Documentação conceitual consolidada](docs/documentacao-conceitual.md)
+- [Revisão final do planejamento](docs/revisao-final-planejamento.md)
 
 ## Resumo final
 

@@ -438,7 +438,7 @@ A área de relatórios deve funcionar com dados fictícios claramente identifica
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Abril | R$ 4.700,00 | R$ 4.650,00 | R$ 50,00 | 1% | 99% |
 | Maio | R$ 4.850,00 | R$ 4.900,00 | -R$ 50,00 | 0% | 101% |
-| Junho | R$ 5.000,00 | R$ 4.500,00 | R$ 500,00 | 10% | 90% |
+| Junho | R$ 5.000,00 | R$ 4.800,00 | R$ 200,00 | 4% | 96% |
 
 ### Categorias demonstrativas de junho
 

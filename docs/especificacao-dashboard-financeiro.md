@@ -525,13 +525,13 @@ Os dados abaixo devem ser usados apenas como exemplo de protótipo e devem ser i
 - Lazer: R$ 350,00.
 - Educação: R$ 220,00.
 - Outros: R$ 250,00.
-- **Total de despesas:** R$ 4.500,00.
+- **Total de despesas:** R$ 4.800,00.
 
 ### Saldo e indicadores
 
-- **Saldo estimado:** R$ 500,00.
-- **Porcentagem poupada estimada:** 10%.
-- **Comprometimento da renda:** 90% considerando despesas totais do mês.
+- **Saldo estimado:** R$ 200,00.
+- **Porcentagem poupada estimada:** 4%.
+- **Comprometimento da renda:** 96% considerando despesas totais do mês.
 
 ### Dívidas em aberto
 
