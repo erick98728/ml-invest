@@ -30,7 +30,7 @@ export function ExpensesPage() {
             alertas educativos sem tom culpabilizador.
           </p>
         </div>
-        <button type="button" onClick={() => setShowDemoForm((current) => !current)}>
+        <button type="button" onClick={() => setShowDemoForm(!showDemoForm)}>
           Adicionar despesa demonstrativa
         </button>
       </section>

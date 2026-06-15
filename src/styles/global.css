@@ -1186,3 +1186,74 @@ h2 {
     width: 100%;
   }
 }
+
+.debt-card-list,
+.goal-card-grid {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.goal-card-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.detail-card {
+  background: #f7fbfa;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+
+.detail-card--goal {
+  background: linear-gradient(180deg, var(--color-goal-soft), var(--color-surface));
+}
+
+.detail-card h3 {
+  color: var(--color-ink);
+  font-size: 1.2rem;
+  margin-bottom: var(--space-1);
+}
+
+.detail-card p {
+  color: var(--color-muted);
+  line-height: 1.55;
+}
+
+.detail-list {
+  display: grid;
+  gap: var(--space-2);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: var(--space-3) 0;
+}
+
+.detail-list div {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2);
+}
+
+.detail-list dt {
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  font-weight: 900;
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+}
+
+.detail-list dd {
+  color: var(--color-ink);
+  font-weight: 900;
+  margin: 0;
+}
+
+.responsible-card .status-badge {
+  margin-bottom: var(--space-2);
+}
+
+@media (max-width: 1100px) {
+  .goal-card-grid,
+  .detail-list {
+    grid-template-columns: 1fr;
+  }
+}

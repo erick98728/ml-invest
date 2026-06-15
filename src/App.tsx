@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { MainLayout, type NavItem, type NavPageId } from './layout/MainLayout';
 import { DashboardPreview } from './pages/DashboardPreview';
+import { DebtsPage } from './pages/DebtsPage';
 import { ExpensesPage } from './pages/ExpensesPage';
+import { GoalsPage } from './pages/GoalsPage';
 import { HomePage } from './pages/HomePage';
 import { IncomePage } from './pages/IncomePage';
 import { PlaceholderPage } from './pages/PlaceholderPage';
@@ -18,26 +20,12 @@ const navItems: NavItem[] = [
   { id: 'profile', label: 'Perfil', description: 'Preferências demonstrativas' },
 ];
 
-const placeholderContent: Record<Exclude<NavPageId, 'home' | 'dashboard' | 'income' | 'expenses'>, {
+const placeholderContent: Record<Exclude<NavPageId, 'home' | 'dashboard' | 'income' | 'expenses' | 'debts' | 'goals'>, {
   title: string;
   eyebrow: string;
   description: string;
   items: string[];
 }> = {
-  debts: {
-    title: 'Dívidas',
-    eyebrow: 'Organização responsável',
-    description:
-      'Página reservada para acompanhar dívidas fictícias em aberto sem indicar decisões definitivas ao usuário.',
-    items: ['Valor total em aberto.', 'Status de vencimento.', 'Avisos cautelosos para dívidas atrasadas.'],
-  },
-  goals: {
-    title: 'Metas',
-    eyebrow: 'Planejamento visual',
-    description:
-      'Página reservada para acompanhar metas financeiras demonstrativas com barras de progresso e mensagens motivadoras.',
-    items: ['Reserva de segurança.', 'Curso ou estudo.', 'Compra planejada ou quitação de compromisso.'],
-  },
   plan: {
     title: 'Plano educativo',
     eyebrow: 'Orientação cautelosa',
@@ -79,6 +67,14 @@ export function App() {
 
     if (activePage === 'expenses') {
       return <ExpensesPage />;
+    }
+
+    if (activePage === 'debts') {
+      return <DebtsPage />;
+    }
+
+    if (activePage === 'goals') {
+      return <GoalsPage />;
     }
 
     const placeholderPage = activePage as keyof typeof placeholderContent;

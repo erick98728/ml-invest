@@ -25,7 +25,7 @@ export function IncomePage() {
             dashboard do ML-Invest.
           </p>
         </div>
-        <button type="button" onClick={() => setShowDemoForm((current) => !current)}>
+        <button type="button" onClick={() => setShowDemoForm(!showDemoForm)}>
           Adicionar receita demonstrativa
         </button>
       </section>

@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ChangeEvent, ReactNode } from 'react';
 import { demoProfile } from '../data/demoData';
 
 export type NavPageId =
@@ -69,7 +69,7 @@ export function MainLayout({ activePage, navItems, children, onNavigate }: MainL
           <select
             id="mobile-page-select"
             value={activePage}
-            onChange={(event) => onNavigate(event.target.value as NavPageId)}
+            onChange={(event: ChangeEvent<HTMLSelectElement>) => onNavigate(event.target.value as NavPageId)}
           >
             {navItems.map((item) => (
               <option key={item.id} value={item.id}>
