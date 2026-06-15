@@ -4,10 +4,16 @@ import { ProgressBar } from '../components/ProgressBar';
 import { StatusBadge } from '../components/StatusBadge';
 import { demoProfile } from '../data/demoData';
 import {
+  calculateAverageGoalProgress,
   calculateGoalProgress,
   calculateIncomeCommitment,
   calculateMonthlyBalance,
   calculateSavedPercentage,
+  calculateTotalOpenDebts,
+  createEducationalAlerts,
+  createMonthlyDiagnosis,
+  getOverdueDebts,
+  getTopExpenseCategories,
   sumEntries,
 } from '../utils/calculations';
 import { formatCurrency, formatPercent } from '../utils/formatters';
@@ -18,6 +24,28 @@ export function DashboardPreview() {
   const balance = calculateMonthlyBalance(totalIncome, totalExpenses);
   const savedPercentage = calculateSavedPercentage(balance, totalIncome);
   const incomeCommitment = calculateIncomeCommitment(totalExpenses, totalIncome);
+  const openDebtsTotal = calculateTotalOpenDebts(demoProfile.debts);
+  const overdueDebts = getOverdueDebts(demoProfile.debts);
+  const topCategories = getTopExpenseCategories(demoProfile.expenses);
+  const variableExpensesTotal = sumEntries(
+    demoProfile.expenses.filter((expense) => expense.type === 'Variável'),
+  );
+  const averageGoalProgress = calculateAverageGoalProgress(demoProfile.goals);
+  const diagnosis = createMonthlyDiagnosis({
+    totalIncome,
+    totalExpenses,
+    balance,
+    savedPercentage,
+    incomeCommitment,
+    overdueDebtsCount: overdueDebts.length,
+    variableExpensesTotal,
+  });
+  const calculatedAlerts = createEducationalAlerts({
+    incomeCommitment,
+    savedPercentage,
+    overdueDebts,
+    topCategories,
+  });
   const featuredGoal = demoProfile.goals[0];
 
   return (
@@ -76,6 +104,12 @@ export function DashboardPreview() {
           description="Parte das receitas associada às despesas."
           tone="attention"
         />
+        <FinancialCard
+          title="Dívidas em aberto"
+          value={formatCurrency(openDebtsTotal)}
+          description={`${overdueDebts.length} dívida(s) demonstrativa(s) atrasada(s).`}
+          tone={overdueDebts.length > 0 ? 'debt' : 'neutral'}
+        />
       </section>
 
       <section className="content-grid">
@@ -83,15 +117,26 @@ export function DashboardPreview() {
           <div className="section-heading">
             <div>
               <p className="eyebrow">Diagnóstico educativo</p>
-              <h2>Mês positivo, mas com atenção ao comprometimento</h2>
+              <h2>{diagnosis.title}</h2>
             </div>
-            <StatusBadge tone="attention">Atenção</StatusBadge>
+            <StatusBadge
+              tone={
+                diagnosis.status === 'risk'
+                  ? 'risk'
+                  : diagnosis.status === 'positive'
+                    ? 'success'
+                    : 'attention'
+              }
+            >
+              {diagnosis.status === 'positive' ? 'Organizado' : 'Atenção'}
+            </StatusBadge>
           </div>
-          <p>
-            Com base nos dados demonstrativos, o mês termina com saldo positivo baixo e despesas
-            ocupando grande parte das receitas. Pode ser útil revisar gastos variáveis e dívidas em
-            aberto antes de ajustar metas.
-          </p>
+          <p>{diagnosis.message}</p>
+          <ul>
+            {diagnosis.suggestions.map((suggestion) => (
+              <li key={suggestion}>{suggestion}</li>
+            ))}
+          </ul>
           <button type="button">Ver plano educativo</button>
         </article>
 
@@ -104,6 +149,7 @@ export function DashboardPreview() {
             <StatusBadge tone="goal">Meta</StatusBadge>
           </div>
           <ProgressBar label="Progresso demonstrativo" value={calculateGoalProgress(featuredGoal)} />
+          <ProgressBar label="Média das metas" value={averageGoalProgress} />
           <p>
             Metas podem ser ajustadas conforme sua realidade muda. O progresso não precisa ser
             linear.
@@ -120,18 +166,26 @@ export function DashboardPreview() {
           <StatusBadge>Base inicial</StatusBadge>
         </div>
 
-        <div className="status-list" aria-label="Exemplos de selos de status">
-          <StatusBadge tone="success">Receita organizada</StatusBadge>
-          <StatusBadge tone="attention">Revisar despesa</StatusBadge>
-          <StatusBadge tone="debt">Dívida em aberto</StatusBadge>
-          <StatusBadge tone="goal">Meta em andamento</StatusBadge>
-          <StatusBadge tone="risk">Risco controlado</StatusBadge>
+        <div className="status-list" aria-label="Exemplos de alertas calculados">
+          {calculatedAlerts.map((alert) => (
+            <StatusBadge
+              key={alert.id}
+              tone={
+                alert.level === 'risk' ? 'risk' : alert.level === 'success' ? 'success' : 'attention'
+              }
+            >
+              {alert.title}
+            </StatusBadge>
+          ))}
         </div>
 
         <ul className="clean-list">
-          <li>Cards usam cores funcionais para receitas, despesas, dívidas, metas e alertas.</li>
-          <li>Botões possuem estados claros e área confortável para toque.</li>
-          <li>Alertas e diagnósticos mantêm linguagem educativa e não alarmista.</li>
+          {topCategories.map((category) => (
+            <li key={category.category}>
+              <strong>{category.category}</strong>: {formatCurrency(category.amount)} ·{' '}
+              {formatPercent(category.percentage)} das despesas.
+            </li>
+          ))}
         </ul>
       </section>
     </main>

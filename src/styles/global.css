@@ -191,7 +191,7 @@ h2 {
 .summary-grid {
   display: grid;
   gap: var(--space-3);
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   margin: var(--space-4) 0;
 }
 
@@ -390,6 +390,10 @@ h2 {
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+.clean-list strong {
+  color: var(--color-ink);
 }
 
 .clean-list li {
