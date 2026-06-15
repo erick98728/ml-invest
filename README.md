@@ -185,6 +185,7 @@ Nessa fase, o protótipo deve provar que o ML-Invest é útil mesmo com dados si
 - [Componentes reutilizáveis](docs/componentes-reutilizaveis.md)
 - [Especificação do dashboard financeiro](docs/especificacao-dashboard-financeiro.md)
 - [Especificação das áreas operacionais](docs/especificacao-areas-operacionais.md)
+- [Especificação do plano financeiro educativo](docs/especificacao-plano-financeiro-educativo.md)
 
 ## Resumo final
 
