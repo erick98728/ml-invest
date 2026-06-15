@@ -193,6 +193,7 @@ Nessa fase, o protótipo deve provar que o ML-Invest é útil mesmo com dados si
 - [Revisão final do planejamento](docs/revisao-final-planejamento.md)
 - [Análise para escolha técnica futura](docs/analise-escolha-tecnica-futura.md)
 - [Plano de execução do protótipo funcional](docs/plano-execucao-prototipo-funcional.md)
+- [Decisão técnica mínima para o protótipo](docs/decisao-tecnica-minima-prototipo.md)
 
 ## Resumo final
 
