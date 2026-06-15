@@ -181,6 +181,7 @@ Nessa fase, o protótipo deve provar que o ML-Invest é útil mesmo com dados si
 ## Documentos de produto
 
 - [Guia de identidade visual e experiência](docs/guia-identidade-visual-experiencia.md)
+- [Arquitetura inicial das páginas](docs/arquitetura-paginas.md)
 
 ## Resumo final
 
