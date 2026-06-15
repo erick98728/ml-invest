@@ -3,7 +3,6 @@ import { Notice } from '../components/Notice';
 import { ProgressBar } from '../components/ProgressBar';
 import { StatusBadge } from '../components/StatusBadge';
 import { demoProfile, type AlertLevel, type TransactionKind } from '../data/demoData';
-import { demoProfile } from '../data/demoData';
 import {
   calculateAverageGoalProgress,
   calculateGoalProgress,
@@ -44,7 +43,6 @@ export function DashboardPreview() {
   const openDebtsTotal = calculateTotalOpenDebts(demoProfile.debts);
   const overdueDebts = getOverdueDebts(demoProfile.debts);
   const topCategories = getTopExpenseCategories(demoProfile.expenses, 4);
-  const topCategories = getTopExpenseCategories(demoProfile.expenses);
   const variableExpensesTotal = sumEntries(
     demoProfile.expenses.filter((expense) => expense.type === 'Variável'),
   );
@@ -89,26 +87,6 @@ export function DashboardPreview() {
             6 meses
           </button>
         </div>
-  const featuredGoal = demoProfile.goals[0];
-
-  return (
-    <section className="page-shell dashboard-page" aria-labelledby="active-page-title">
-      <section className="hero" aria-labelledby="active-page-title">
-        <div>
-          <p className="eyebrow">Protótipo frontend/local</p>
-          <h1 id="active-page-title">Dashboard financeiro</h1>
-          <p className="hero__text">
-            Organize receitas, despesas, dívidas e metas para entender seu mês com clareza,
-            simplicidade e orientação educativa.
-          </p>
-          <div className="hero__actions" aria-label="Ações iniciais">
-            <button type="button">Ver meu mês</button>
-            <button className="button button--secondary" type="button">
-              Usar dados demonstrativos
-            </button>
-          </div>
-        </div>
-        <span className="demo-badge">{demoProfile.period}</span>
       </section>
 
       <Notice title="Dados demonstrativos">
@@ -160,11 +138,6 @@ export function DashboardPreview() {
           <div className="section-heading">
             <div>
               <p className="eyebrow">Diagnóstico financeiro do mês</p>
-      <section className="content-grid">
-        <article className="panel panel--featured">
-          <div className="section-heading">
-            <div>
-              <p className="eyebrow">Diagnóstico educativo</p>
               <h2>{diagnosis.title}</h2>
             </div>
             <StatusBadge
@@ -185,7 +158,6 @@ export function DashboardPreview() {
               <li key={suggestion}>{suggestion}</li>
             ))}
           </ul>
-          <button type="button">Ver plano educativo</button>
         </article>
 
         <article className="panel panel--soft">
@@ -211,7 +183,7 @@ export function DashboardPreview() {
               <p className="eyebrow">Alertas financeiros</p>
               <h2>Leituras educativas</h2>
             </div>
-            <StatusBadge tone="attention">{calculatedAlerts.length} alerta(s)</StatusBadge>
+            <StatusBadge tone="attention">{`${calculatedAlerts.length} alerta(s)`}</StatusBadge>
           </div>
           <div className="alert-list">
             {calculatedAlerts.map((alert) => (
@@ -229,7 +201,7 @@ export function DashboardPreview() {
               <p className="eyebrow">Maiores categorias</p>
               <h2>Onde os gastos se concentram</h2>
             </div>
-            <StatusBadge>Top {topCategories.length}</StatusBadge>
+            <StatusBadge>{`Top ${topCategories.length}`}</StatusBadge>
           </div>
           <div className="category-list">
             {topCategories.map((category) => (
@@ -280,7 +252,7 @@ export function DashboardPreview() {
               <p className="eyebrow">Metas financeiras</p>
               <h2>Progresso visual</h2>
             </div>
-            <StatusBadge tone="goal">Média {formatPercent(averageGoalProgress)}</StatusBadge>
+            <StatusBadge tone="goal">{`Média ${formatPercent(averageGoalProgress)}`}</StatusBadge>
           </div>
           <div className="goal-list">
             {demoProfile.goals.map((goal) => (
@@ -341,50 +313,6 @@ export function DashboardPreview() {
             ))}
           </ul>
         </article>
-              <p className="eyebrow">Meta em destaque</p>
-              <h2>{featuredGoal.name}</h2>
-            </div>
-            <StatusBadge tone="goal">Meta</StatusBadge>
-          </div>
-          <ProgressBar label="Progresso demonstrativo" value={calculateGoalProgress(featuredGoal)} />
-          <ProgressBar label="Média das metas" value={averageGoalProgress} />
-          <p>
-            Metas podem ser ajustadas conforme sua realidade muda. O progresso não precisa ser
-            linear.
-          </p>
-        </article>
-      </section>
-
-      <section className="visual-system" aria-labelledby="visual-system-title">
-        <div className="section-heading">
-          <div>
-            <p className="eyebrow">Sistema visual base</p>
-            <h2 id="visual-system-title">Padrões prontos para próximas telas</h2>
-          </div>
-          <StatusBadge>Base inicial</StatusBadge>
-        </div>
-
-        <div className="status-list" aria-label="Exemplos de alertas calculados">
-          {calculatedAlerts.map((alert) => (
-            <StatusBadge
-              key={alert.id}
-              tone={
-                alert.level === 'risk' ? 'risk' : alert.level === 'success' ? 'success' : 'attention'
-              }
-            >
-              {alert.title}
-            </StatusBadge>
-          ))}
-        </div>
-
-        <ul className="clean-list">
-          {topCategories.map((category) => (
-            <li key={category.category}>
-              <strong>{category.category}</strong>: {formatCurrency(category.amount)} ·{' '}
-              {formatPercent(category.percentage)} das despesas.
-            </li>
-          ))}
-        </ul>
       </section>
     </section>
   );

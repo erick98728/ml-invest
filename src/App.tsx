@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { MainLayout, type NavItem, type NavPageId } from './layout/MainLayout';
 import { DashboardPreview } from './pages/DashboardPreview';
+import { ExpensesPage } from './pages/ExpensesPage';
 import { HomePage } from './pages/HomePage';
+import { IncomePage } from './pages/IncomePage';
 import { PlaceholderPage } from './pages/PlaceholderPage';
 
 const navItems: NavItem[] = [
@@ -16,26 +18,12 @@ const navItems: NavItem[] = [
   { id: 'profile', label: 'Perfil', description: 'Preferências demonstrativas' },
 ];
 
-const placeholderContent: Record<Exclude<NavPageId, 'home' | 'dashboard'>, {
+const placeholderContent: Record<Exclude<NavPageId, 'home' | 'dashboard' | 'income' | 'expenses'>, {
   title: string;
   eyebrow: string;
   description: string;
   items: string[];
 }> = {
-  income: {
-    title: 'Receitas',
-    eyebrow: 'Área financeira',
-    description:
-      'Página reservada para listar entradas demonstrativas, categorias de receita e filtros simples por período.',
-    items: ['Resumo de receitas do mês.', 'Lista de entradas fictícias.', 'Filtros por categoria e recorrência.'],
-  },
-  expenses: {
-    title: 'Despesas',
-    eyebrow: 'Área financeira',
-    description:
-      'Página reservada para organizar despesas fixas, essenciais e variáveis com linguagem simples e educativa.',
-    items: ['Resumo de despesas por tipo.', 'Categorias de maior impacto.', 'Alertas não alarmistas sobre gastos elevados.'],
-  },
   debts: {
     title: 'Dívidas',
     eyebrow: 'Organização responsável',
@@ -85,7 +73,16 @@ export function App() {
       return <DashboardPreview />;
     }
 
-    return <PlaceholderPage {...placeholderContent[activePage]} />;
+    if (activePage === 'income') {
+      return <IncomePage />;
+    }
+
+    if (activePage === 'expenses') {
+      return <ExpensesPage />;
+    }
+
+    const placeholderPage = activePage as keyof typeof placeholderContent;
+    return <PlaceholderPage {...placeholderContent[placeholderPage]} />;
   }
 
   return (
