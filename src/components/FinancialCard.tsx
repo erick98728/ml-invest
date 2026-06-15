@@ -2,7 +2,7 @@ type FinancialCardProps = {
   title: string;
   value: string;
   description: string;
-  tone?: 'neutral' | 'positive' | 'attention';
+  tone?: 'neutral' | 'income' | 'expense' | 'debt' | 'goal' | 'positive' | 'attention' | 'risk';
 };
 
 export function FinancialCard({ title, value, description, tone = 'neutral' }: FinancialCardProps) {
