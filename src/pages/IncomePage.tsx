@@ -2,13 +2,13 @@ import { useState } from 'react';
 import { FinancialCard } from '../components/FinancialCard';
 import { Notice } from '../components/Notice';
 import { StatusBadge } from '../components/StatusBadge';
-import { demoProfile } from '../data/demoData';
+import { useDemoScenario } from '../context/DemoScenarioContext';
 import { sumEntries } from '../utils/calculations';
 import { formatCurrency } from '../utils/formatters';
 
-const incomeCategories = Array.from(new Set(demoProfile.income.map((income) => income.category)));
-
 export function IncomePage() {
+  const { profile: demoProfile } = useDemoScenario();
+  const incomeCategories = Array.from(new Set(demoProfile.income.map((income) => income.category)));
   const [showDemoForm, setShowDemoForm] = useState(false);
   const totalIncome = sumEntries(demoProfile.income);
   const largestIncome = [...demoProfile.income].sort((current, next) => next.amount - current.amount)[0];

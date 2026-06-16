@@ -1497,3 +1497,84 @@ h2 {
     display: grid;
   }
 }
+
+.profile-hero {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.profile-hero h2 {
+  color: var(--color-ink);
+  font-size: clamp(1.8rem, 4vw, 2.7rem);
+  margin: var(--space-1) 0;
+}
+
+.profile-hero p,
+.profile-preferences span {
+  color: var(--color-muted);
+}
+
+.profile-preferences {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  display: grid;
+  gap: var(--space-2);
+  min-width: min(18rem, 100%);
+  padding: var(--space-4);
+}
+
+.profile-preferences strong {
+  color: var(--color-ink);
+  font-size: 1.15rem;
+}
+
+.scenario-switcher {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.scenario-option {
+  align-items: flex-start;
+  background: #f8fcfb;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-muted);
+  cursor: pointer;
+  display: grid;
+  gap: var(--space-2);
+  line-height: 1.5;
+  padding: var(--space-4);
+  text-align: left;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.scenario-option strong {
+  color: var(--color-ink);
+  font-size: 1.05rem;
+}
+
+.scenario-option:hover,
+.scenario-option--active {
+  border-color: var(--color-brand);
+  box-shadow: var(--shadow-soft);
+  transform: translateY(-1px);
+}
+
+.scenario-option--active {
+  background: linear-gradient(180deg, var(--color-brand-50), var(--color-surface));
+}
+
+@media (max-width: 900px) {
+  .profile-hero {
+    align-items: stretch;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .scenario-switcher {
+    grid-template-columns: 1fr;
+  }
+}

@@ -8,7 +8,9 @@ import { GoalsPage } from './pages/GoalsPage';
 import { HomePage } from './pages/HomePage';
 import { IncomePage } from './pages/IncomePage';
 import { PlaceholderPage } from './pages/PlaceholderPage';
+import { ProfileSettingsPage } from './pages/ProfileSettingsPage';
 import { ReportsPage } from './pages/ReportsPage';
+import { DemoScenarioProvider } from './context/DemoScenarioContext';
 
 const navItems: NavItem[] = [
   { id: 'home', label: 'Início', description: 'Apresentação do protótipo' },
@@ -21,21 +23,6 @@ const navItems: NavItem[] = [
   { id: 'reports', label: 'Relatórios', description: 'Evolução e gráficos' },
   { id: 'profile', label: 'Perfil', description: 'Preferências demonstrativas' },
 ];
-
-const placeholderContent: Record<Exclude<NavPageId, 'home' | 'dashboard' | 'income' | 'expenses' | 'debts' | 'goals' | 'plan' | 'reports'>, {
-  title: string;
-  eyebrow: string;
-  description: string;
-  items: string[];
-}> = {
-  profile: {
-    title: 'Perfil e configurações',
-    eyebrow: 'Demonstração local',
-    description:
-      'Página reservada para preferências demonstrativas do protótipo, sem conta real, senha ou autenticação.',
-    items: ['Identificação fictícia do usuário.', 'Preferências visuais futuras.', 'Aviso de dados demonstrativos.'],
-  },
-};
 
 export function App() {
   const [activePage, setActivePage] = useState<NavPageId>('home');
@@ -73,13 +60,25 @@ export function App() {
       return <ReportsPage />;
     }
 
-    const placeholderPage = activePage as keyof typeof placeholderContent;
-    return <PlaceholderPage {...placeholderContent[placeholderPage]} />;
+    if (activePage === 'profile') {
+      return <ProfileSettingsPage />;
+    }
+
+    return (
+      <PlaceholderPage
+        title="Área demonstrativa"
+        eyebrow="Protótipo"
+        description="Esta área ainda está em preparação."
+        items={["Conteúdo futuro do protótipo."]}
+      />
+    );
   }
 
   return (
-    <MainLayout activePage={activePage} navItems={navItems} onNavigate={setActivePage}>
-      {renderPage()}
-    </MainLayout>
+    <DemoScenarioProvider>
+      <MainLayout activePage={activePage} navItems={navItems} onNavigate={setActivePage}>
+        {renderPage()}
+      </MainLayout>
+    </DemoScenarioProvider>
   );
 }

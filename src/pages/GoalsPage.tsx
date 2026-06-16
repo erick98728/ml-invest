@@ -3,7 +3,8 @@ import { FinancialCard } from '../components/FinancialCard';
 import { Notice } from '../components/Notice';
 import { ProgressBar } from '../components/ProgressBar';
 import { StatusBadge } from '../components/StatusBadge';
-import { demoProfile, type Goal } from '../data/demoData';
+import type { Goal } from '../data/demoData';
+import { useDemoScenario } from '../context/DemoScenarioContext';
 import { calculateAverageGoalProgress, calculateGoalProgress } from '../utils/calculations';
 import { formatCurrency, formatPercent } from '../utils/formatters';
 
@@ -42,6 +43,7 @@ function getGoalTone(status: string): 'success' | 'attention' | 'goal' {
 }
 
 export function GoalsPage() {
+  const { profile: demoProfile } = useDemoScenario();
   const [showDemoForm, setShowDemoForm] = useState(false);
   const plannedAmount = demoProfile.goals.reduce((total, goal) => total + goal.targetAmount, 0);
   const reservedAmount = demoProfile.goals.reduce((total, goal) => total + goal.currentAmount, 0);

@@ -2,7 +2,7 @@ import { FinancialCard } from '../components/FinancialCard';
 import { Notice } from '../components/Notice';
 import { ProgressBar } from '../components/ProgressBar';
 import { StatusBadge } from '../components/StatusBadge';
-import { demoProfile } from '../data/demoData';
+import { useDemoScenario } from '../context/DemoScenarioContext';
 import {
   calculateAverageGoalProgress,
   calculateGoalProgress,
@@ -15,6 +15,7 @@ import {
 import { formatCurrency, formatPercent } from '../utils/formatters';
 
 export function ReportsPage() {
+  const { profile: demoProfile } = useDemoScenario();
   const reports = demoProfile.monthlyReports;
   const latestReport = reports[reports.length - 1] ?? {
     month: 'Sem dados',

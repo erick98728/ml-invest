@@ -2,14 +2,14 @@ import { useState } from 'react';
 import { FinancialCard } from '../components/FinancialCard';
 import { Notice } from '../components/Notice';
 import { StatusBadge } from '../components/StatusBadge';
-import { demoProfile } from '../data/demoData';
+import { useDemoScenario } from '../context/DemoScenarioContext';
 import { getTopExpenseCategories, sumEntries } from '../utils/calculations';
 import { formatCurrency, formatPercent } from '../utils/formatters';
 
-const expenseCategories = Array.from(new Set(demoProfile.expenses.map((expense) => expense.category)));
-const expenseTypes = Array.from(new Set(demoProfile.expenses.map((expense) => expense.type)));
-
 export function ExpensesPage() {
+  const { profile: demoProfile } = useDemoScenario();
+  const expenseCategories = Array.from(new Set(demoProfile.expenses.map((expense) => expense.category)));
+  const expenseTypes = Array.from(new Set(demoProfile.expenses.map((expense) => expense.type)));
   const [showDemoForm, setShowDemoForm] = useState(false);
   const totalExpenses = sumEntries(demoProfile.expenses);
   const fixedExpenses = sumEntries(demoProfile.expenses.filter((expense) => expense.type === 'Fixa'));

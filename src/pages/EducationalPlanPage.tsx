@@ -2,7 +2,7 @@ import { FinancialCard } from '../components/FinancialCard';
 import { Notice } from '../components/Notice';
 import { ProgressBar } from '../components/ProgressBar';
 import { StatusBadge } from '../components/StatusBadge';
-import { demoProfile } from '../data/demoData';
+import { useDemoScenario } from '../context/DemoScenarioContext';
 import {
   calculateAverageGoalProgress,
   calculateGoalProgress,
@@ -52,6 +52,7 @@ const monthlyChecklist = [
 ];
 
 export function EducationalPlanPage() {
+  const { profile: demoProfile } = useDemoScenario();
   const totalIncome = sumEntries(demoProfile.income);
   const totalExpenses = sumEntries(demoProfile.expenses);
   const balance = calculateMonthlyBalance(totalIncome, totalExpenses);

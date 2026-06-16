@@ -1,5 +1,5 @@
 import { StatusBadge } from '../components/StatusBadge';
-import { demoProfile } from '../data/demoData';
+import { useDemoScenario } from '../context/DemoScenarioContext';
 
 const benefitCards = [
   {
@@ -28,6 +28,7 @@ type HomePageProps = {
 };
 
 export function HomePage({ onOpenDashboard }: HomePageProps) {
+  const { profile: demoProfile } = useDemoScenario();
   return (
     <section className="page-shell home-page">
       <section className="home-hero" aria-labelledby="active-page-title">

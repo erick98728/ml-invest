@@ -2,7 +2,8 @@ import { FinancialCard } from '../components/FinancialCard';
 import { Notice } from '../components/Notice';
 import { ProgressBar } from '../components/ProgressBar';
 import { StatusBadge } from '../components/StatusBadge';
-import { demoProfile, type AlertLevel, type TransactionKind } from '../data/demoData';
+import type { AlertLevel, TransactionKind } from '../data/demoData';
+import { useDemoScenario } from '../context/DemoScenarioContext';
 import {
   calculateAverageGoalProgress,
   calculateGoalProgress,
@@ -35,6 +36,7 @@ function getTransactionTone(kind: TransactionKind): 'success' | 'attention' {
 }
 
 export function DashboardPreview() {
+  const { profile: demoProfile } = useDemoScenario();
   const totalIncome = sumEntries(demoProfile.income);
   const totalExpenses = sumEntries(demoProfile.expenses);
   const balance = calculateMonthlyBalance(totalIncome, totalExpenses);

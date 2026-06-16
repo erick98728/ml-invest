@@ -1,5 +1,5 @@
 import type { ChangeEvent, ReactNode } from 'react';
-import { demoProfile } from '../data/demoData';
+import { scenarioLabels, useDemoScenario } from '../context/DemoScenarioContext';
 
 export type NavPageId =
   | 'home'
@@ -27,6 +27,7 @@ type MainLayoutProps = {
 
 export function MainLayout({ activePage, navItems, children, onNavigate }: MainLayoutProps) {
   const activeItem = navItems.find((item) => item.id === activePage) ?? navItems[0];
+  const { activeScenario, profile } = useDemoScenario();
 
   return (
     <div className="app-layout">
@@ -42,7 +43,7 @@ export function MainLayout({ activePage, navItems, children, onNavigate }: MainL
         </div>
 
         <div className="demo-pill" aria-label="Dados demonstrativos ativos">
-          {demoProfile.name} · dados fictícios
+          {profile.name} · {scenarioLabels[activeScenario]}
         </div>
       </header>
 

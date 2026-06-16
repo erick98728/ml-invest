@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { FinancialCard } from '../components/FinancialCard';
 import { Notice } from '../components/Notice';
 import { StatusBadge } from '../components/StatusBadge';
-import { demoProfile, type DebtStatus } from '../data/demoData';
+import type { DebtStatus } from '../data/demoData';
+import { useDemoScenario } from '../context/DemoScenarioContext';
 import { calculateTotalOpenDebts, getOverdueDebts } from '../utils/calculations';
 import { formatCurrency } from '../utils/formatters';
 
@@ -19,6 +20,7 @@ function getDebtTone(status: DebtStatus): 'success' | 'attention' | 'risk' | 'de
 }
 
 export function DebtsPage() {
+  const { profile: demoProfile } = useDemoScenario();
   const [showDemoForm, setShowDemoForm] = useState(false);
   const totalOpenDebts = calculateTotalOpenDebts(demoProfile.debts);
   const overdueDebts = getOverdueDebts(demoProfile.debts);
