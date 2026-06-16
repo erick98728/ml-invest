@@ -3,10 +3,12 @@ import { MainLayout, type NavItem, type NavPageId } from './layout/MainLayout';
 import { DashboardPreview } from './pages/DashboardPreview';
 import { DebtsPage } from './pages/DebtsPage';
 import { ExpensesPage } from './pages/ExpensesPage';
+import { EducationalPlanPage } from './pages/EducationalPlanPage';
 import { GoalsPage } from './pages/GoalsPage';
 import { HomePage } from './pages/HomePage';
 import { IncomePage } from './pages/IncomePage';
 import { PlaceholderPage } from './pages/PlaceholderPage';
+import { ReportsPage } from './pages/ReportsPage';
 
 const navItems: NavItem[] = [
   { id: 'home', label: 'Início', description: 'Apresentação do protótipo' },
@@ -20,26 +22,12 @@ const navItems: NavItem[] = [
   { id: 'profile', label: 'Perfil', description: 'Preferências demonstrativas' },
 ];
 
-const placeholderContent: Record<Exclude<NavPageId, 'home' | 'dashboard' | 'income' | 'expenses' | 'debts' | 'goals'>, {
+const placeholderContent: Record<Exclude<NavPageId, 'home' | 'dashboard' | 'income' | 'expenses' | 'debts' | 'goals' | 'plan' | 'reports'>, {
   title: string;
   eyebrow: string;
   description: string;
   items: string[];
 }> = {
-  plan: {
-    title: 'Plano educativo',
-    eyebrow: 'Orientação cautelosa',
-    description:
-      'Página reservada para sugerir prioridades educativas sem consultoria profissional ou promessa de resultado.',
-    items: ['Organizar despesas essenciais.', 'Observar dívidas atrasadas.', 'Separar pequenas ações para o próximo mês.'],
-  },
-  reports: {
-    title: 'Relatórios',
-    eyebrow: 'Evolução financeira',
-    description:
-      'Página reservada para relatórios simples com dados mensais fictícios e explicações fáceis de entender.',
-    items: ['Comparativo de receitas e despesas.', 'Evolução do saldo mensal.', 'Distribuição de gastos por categoria.'],
-  },
   profile: {
     title: 'Perfil e configurações',
     eyebrow: 'Demonstração local',
@@ -75,6 +63,14 @@ export function App() {
 
     if (activePage === 'goals') {
       return <GoalsPage />;
+    }
+
+    if (activePage === 'plan') {
+      return <EducationalPlanPage />;
+    }
+
+    if (activePage === 'reports') {
+      return <ReportsPage />;
     }
 
     const placeholderPage = activePage as keyof typeof placeholderContent;
