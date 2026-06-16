@@ -42,8 +42,11 @@ export function MainLayout({ activePage, navItems, children, onNavigate }: MainL
           </div>
         </div>
 
-        <div className="demo-pill" aria-label="Dados demonstrativos ativos">
-          {profile.name} · {scenarioLabels[activeScenario]}
+        <div className="app-header__right" aria-label="Contexto demonstrativo ativo">
+          <span className="demo-pill">Protótipo local</span>
+          <span className="demo-pill demo-pill--soft">
+            {profile.name} · {scenarioLabels[activeScenario]}
+          </span>
         </div>
       </header>
 
@@ -54,6 +57,7 @@ export function MainLayout({ activePage, navItems, children, onNavigate }: MainL
               <button
                 key={item.id}
                 type="button"
+                data-page={item.id}
                 className={`nav-item ${item.id === activePage ? 'nav-item--active' : ''}`}
                 aria-current={item.id === activePage ? 'page' : undefined}
                 onClick={() => onNavigate(item.id)}
