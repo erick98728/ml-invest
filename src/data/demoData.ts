@@ -1,6 +1,6 @@
 export type TransactionKind = 'income' | 'expense';
 export type ExpenseType = 'Fixa' | 'Variável' | 'Essencial';
-export type DebtStatus = 'Em dia' | 'Próximo vencimento' | 'Atrasada';
+export type DebtStatus = 'Em dia' | 'Próximo vencimento' | 'Atrasada' | 'Quitada';
 export type GoalStatus = 'No prazo' | 'Atenção' | 'Pausada';
 export type AlertLevel = 'info' | 'attention' | 'risk' | 'success';
 

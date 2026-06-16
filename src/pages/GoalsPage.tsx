@@ -1,12 +1,16 @@
-import { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 import { FinancialCard } from '../components/FinancialCard';
 import { Notice } from '../components/Notice';
 import { ProgressBar } from '../components/ProgressBar';
 import { StatusBadge } from '../components/StatusBadge';
-import type { Goal } from '../data/demoData';
+import type { Goal, GoalStatus } from '../data/demoData';
 import { useDemoScenario } from '../context/DemoScenarioContext';
 import { calculateAverageGoalProgress, calculateGoalProgress } from '../utils/calculations';
 import { formatCurrency, formatPercent } from '../utils/formatters';
+
+type GoalFormState = Pick<Goal, 'name' | 'category' | 'currentAmount' | 'targetAmount' | 'targetDate' | 'monthlySuggestion' | 'status'>;
+
+const initialGoalForm: GoalFormState = { name: 'Reserva para estudo', category: 'Educação', currentAmount: 100, targetAmount: 1500, targetDate: '2026-12-31', monthlySuggestion: 150, status: 'No prazo' };
 
 function getGoalStatus(goal: Goal) {
   const progress = calculateGoalProgress(goal);
@@ -43,12 +47,27 @@ function getGoalTone(status: string): 'success' | 'attention' | 'goal' {
 }
 
 export function GoalsPage() {
-  const { profile: demoProfile } = useDemoScenario();
+  const { profile: demoProfile, updateProfile } = useDemoScenario();
   const [showDemoForm, setShowDemoForm] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [form, setForm] = useState<GoalFormState>(initialGoalForm);
+  const [feedback, setFeedback] = useState('');
   const plannedAmount = demoProfile.goals.reduce((total, goal) => total + goal.targetAmount, 0);
   const reservedAmount = demoProfile.goals.reduce((total, goal) => total + goal.currentAmount, 0);
   const averageProgress = calculateAverageGoalProgress(demoProfile.goals);
   const hasGoals = demoProfile.goals.length > 0;
+
+  function resetForm() { setEditingId(null); setForm(initialGoalForm); setShowDemoForm(true); }
+  function submitGoal(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const nextGoal: Goal = { id: editingId ?? `meta-sim-${Date.now()}`, ...form };
+    updateProfile((profile) => ({ ...profile, goals: editingId ? profile.goals.map((goal) => (goal.id === editingId ? nextGoal : goal)) : [...profile.goals, nextGoal] }));
+    setFeedback(editingId ? 'Meta demonstrativa atualizada localmente.' : 'Meta demonstrativa adicionada localmente.');
+    resetForm();
+  }
+  function editGoal(goal: Goal) { setEditingId(goal.id); setForm({ name: goal.name, category: goal.category, currentAmount: goal.currentAmount, targetAmount: goal.targetAmount, targetDate: goal.targetDate, monthlySuggestion: goal.monthlySuggestion, status: goal.status }); setShowDemoForm(true); setFeedback('Editando uma meta fictícia. Nenhuma informação real será salva.'); }
+  function deleteGoal(goalId: string) { updateProfile((profile) => ({ ...profile, goals: profile.goals.filter((goal) => goal.id !== goalId) })); setFeedback('Meta demonstrativa excluída apenas desta simulação.'); }
+  function updateGoalProgress(goal: Goal) { const increment = Math.max(goal.monthlySuggestion, 50); updateProfile((profile) => ({ ...profile, goals: profile.goals.map((item) => item.id === goal.id ? { ...item, currentAmount: Math.min(item.currentAmount + increment, item.targetAmount) } : item) })); setFeedback('Progresso da meta atualizado com um valor fictício local.'); }
 
   return (
     <section className="page-shell finance-page" aria-labelledby="active-page-title">
@@ -61,7 +80,7 @@ export function GoalsPage() {
             representa promessa de que uma meta será alcançada.
           </p>
         </div>
-        <button type="button" onClick={() => setShowDemoForm(!showDemoForm)}>
+        <button type="button" onClick={resetForm}>
           Adicionar meta demonstrativa
         </button>
       </section>
@@ -70,6 +89,7 @@ export function GoalsPage() {
         Metas podem mudar conforme a vida muda. O ML-Invest mostra organização e progresso, sem
         prometer resultado ou indicar produtos financeiros específicos.
       </Notice>
+      {feedback && <div className="inline-feedback" role="status">{feedback}</div>}
 
       <section className="summary-grid" aria-label="Resumo de metas">
         <FinancialCard
@@ -127,34 +147,18 @@ export function GoalsPage() {
 
       {showDemoForm && (
         <section className="demo-form-panel" aria-labelledby="goal-form-title">
-          <div className="section-heading">
-            <div>
-              <p className="eyebrow">Formulário simulado</p>
-              <h2 id="goal-form-title">Nova meta demonstrativa</h2>
-            </div>
-            <StatusBadge>Não salva dados</StatusBadge>
-          </div>
-          <div className="form-grid">
-            <label>
-              Nome da meta
-              <input type="text" value="Reserva para estudo" readOnly />
-            </label>
-            <label>
-              Tipo
-              <select value="Educação" disabled>
-                <option>Educação</option>
-              </select>
-            </label>
-            <label>
-              Valor objetivo
-              <input type="text" value="R$ 1.500,00" readOnly />
-            </label>
-            <label>
-              Prazo demonstrativo
-              <input type="text" value="2026-12-31" readOnly />
-            </label>
-          </div>
-          <p className="form-helper">Exemplo visual apenas. Nenhuma informação é armazenada.</p>
+          <div className="section-heading"><div><p className="eyebrow">Formulário simulado</p><h2 id="goal-form-title">{editingId ? 'Editar meta demonstrativa' : 'Nova meta demonstrativa'}</h2></div><StatusBadge>Estado local</StatusBadge></div>
+          <form className="form-grid" onSubmit={submitGoal}>
+            <label>Nome da meta<input type="text" value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} /></label>
+            <label>Tipo<input type="text" value={form.category} onChange={(event) => setForm({ ...form, category: event.target.value })} /></label>
+            <label>Valor objetivo<input type="number" min="0" step="50" value={form.targetAmount} onChange={(event) => setForm({ ...form, targetAmount: Number(event.target.value) })} /></label>
+            <label>Valor atual<input type="number" min="0" step="50" value={form.currentAmount} onChange={(event) => setForm({ ...form, currentAmount: Number(event.target.value) })} /></label>
+            <label>Sugestão mensal<input type="number" min="0" step="10" value={form.monthlySuggestion} onChange={(event) => setForm({ ...form, monthlySuggestion: Number(event.target.value) })} /></label>
+            <label>Prazo<input type="date" value={form.targetDate} onChange={(event) => setForm({ ...form, targetDate: event.target.value })} /></label>
+            <label>Status<select value={form.status} onChange={(event) => setForm({ ...form, status: event.target.value as GoalStatus })}><option>No prazo</option><option>Atenção</option><option>Pausada</option></select></label>
+            <div className="form-actions"><button type="submit">{editingId ? 'Salvar edição simulada' : 'Adicionar simulação'}</button><button className="button button--secondary" type="button" onClick={() => setShowDemoForm(false)}>Cancelar</button></div>
+          </form>
+          <p className="form-helper">Simulação temporária. O progresso não representa promessa de resultado.</p>
         </section>
       )}
 
@@ -194,9 +198,9 @@ export function GoalsPage() {
                     necessário.
                   </p>
                   <div className="row-actions">
-                    <button className="button button--secondary" type="button">Editar</button>
-                    <button className="button button--secondary" type="button">Excluir</button>
-                    <button className="button button--secondary" type="button">Atualizar progresso</button>
+                    <button className="button button--secondary" type="button" onClick={() => editGoal(goal)}>Editar</button>
+                    <button className="button button--secondary" type="button" onClick={() => deleteGoal(goal.id)}>Excluir</button>
+                    <button className="button button--secondary" type="button" onClick={() => updateGoalProgress(goal)}>Atualizar progresso</button>
                   </div>
                 </article>
               );

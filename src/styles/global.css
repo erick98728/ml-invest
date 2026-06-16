@@ -1578,3 +1578,24 @@ h2 {
     grid-template-columns: 1fr;
   }
 }
+
+.inline-feedback {
+  background: var(--color-success-soft);
+  border: 1px solid rgba(44, 123, 95, 0.22);
+  border-radius: var(--radius-md);
+  color: var(--color-success);
+  font-weight: 800;
+  padding: var(--space-3) var(--space-4);
+}
+
+.form-actions {
+  align-items: end;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.form-actions .button,
+.form-actions button {
+  min-height: 44px;
+}

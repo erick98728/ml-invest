@@ -1,13 +1,30 @@
-import { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 import { FinancialCard } from '../components/FinancialCard';
 import { Notice } from '../components/Notice';
 import { StatusBadge } from '../components/StatusBadge';
-import type { DebtStatus } from '../data/demoData';
+import type { Debt, DebtStatus } from '../data/demoData';
 import { useDemoScenario } from '../context/DemoScenarioContext';
 import { calculateTotalOpenDebts, getOverdueDebts } from '../utils/calculations';
 import { formatCurrency } from '../utils/formatters';
 
+type DebtFormState = Pick<Debt, 'name' | 'category' | 'totalAmount' | 'openAmount' | 'installment' | 'dueDate' | 'status' | 'priorityHint'>;
+
+const initialDebtForm: DebtFormState = {
+  name: 'Compromisso demonstrativo',
+  category: 'Parcelamento',
+  totalAmount: 800,
+  openAmount: 800,
+  installment: 160,
+  dueDate: '2026-06-28',
+  status: 'Próximo vencimento',
+  priorityHint: 'Acompanhar vencimento sem tomar decisões impulsivas.',
+};
+
 function getDebtTone(status: DebtStatus): 'success' | 'attention' | 'risk' | 'debt' {
+  if (status === 'Quitada') {
+    return 'debt';
+  }
+
   if (status === 'Atrasada') {
     return 'risk';
   }
@@ -20,12 +37,52 @@ function getDebtTone(status: DebtStatus): 'success' | 'attention' | 'risk' | 'de
 }
 
 export function DebtsPage() {
-  const { profile: demoProfile } = useDemoScenario();
+  const { profile: demoProfile, updateProfile } = useDemoScenario();
   const [showDemoForm, setShowDemoForm] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [form, setForm] = useState<DebtFormState>(initialDebtForm);
+  const [feedback, setFeedback] = useState('');
   const totalOpenDebts = calculateTotalOpenDebts(demoProfile.debts);
   const overdueDebts = getOverdueDebts(demoProfile.debts);
   const monthlyInstallments = demoProfile.debts.reduce((total, debt) => total + debt.installment, 0);
   const hasDebts = demoProfile.debts.length > 0;
+
+  function resetForm() {
+    setEditingId(null);
+    setForm(initialDebtForm);
+    setShowDemoForm(true);
+  }
+
+  function submitDebt(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const nextDebt: Debt = { id: editingId ?? `div-sim-${Date.now()}`, ...form };
+    updateProfile((profile) => ({
+      ...profile,
+      debts: editingId ? profile.debts.map((debt) => (debt.id === editingId ? nextDebt : debt)) : [...profile.debts, nextDebt],
+    }));
+    setFeedback(editingId ? 'Dívida demonstrativa atualizada localmente.' : 'Dívida demonstrativa adicionada localmente.');
+    resetForm();
+  }
+
+  function editDebt(debt: Debt) {
+    setEditingId(debt.id);
+    setForm({ name: debt.name, category: debt.category, totalAmount: debt.totalAmount, openAmount: debt.openAmount, installment: debt.installment, dueDate: debt.dueDate, status: debt.status, priorityHint: debt.priorityHint });
+    setShowDemoForm(true);
+    setFeedback('Editando uma dívida fictícia. Nenhuma informação real será salva.');
+  }
+
+  function deleteDebt(debtId: string) {
+    updateProfile((profile) => ({ ...profile, debts: profile.debts.filter((debt) => debt.id !== debtId) }));
+    setFeedback('Dívida demonstrativa excluída apenas da simulação local.');
+  }
+
+  function markDebtAsPaid(debtId: string) {
+    updateProfile((profile) => ({
+      ...profile,
+      debts: profile.debts.map((debt) => debt.id === debtId ? { ...debt, openAmount: 0, installment: 0, status: 'Quitada' } : debt),
+    }));
+    setFeedback('Dívida marcada como quitada somente nesta simulação.');
+  }
 
   return (
     <section className="page-shell finance-page" aria-labelledby="active-page-title">
@@ -38,7 +95,7 @@ export function DebtsPage() {
             ou cobranças. A proposta é organizar informações para análise educativa.
           </p>
         </div>
-        <button type="button" onClick={() => setShowDemoForm(!showDemoForm)}>
+        <button type="button" onClick={resetForm}>
           Adicionar dívida demonstrativa
         </button>
       </section>
@@ -47,6 +104,7 @@ export function DebtsPage() {
         O ML-Invest não indica qual dívida deve ser paga primeiro e não recomenda empréstimos,
         bancos, cartões ou produtos financeiros. As mensagens são gerais e educativas.
       </Notice>
+      {feedback && <div className="inline-feedback" role="status">{feedback}</div>}
 
       <section className="summary-grid" aria-label="Resumo de dívidas">
         <FinancialCard
@@ -114,34 +172,18 @@ export function DebtsPage() {
 
       {showDemoForm && (
         <section className="demo-form-panel" aria-labelledby="debt-form-title">
-          <div className="section-heading">
-            <div>
-              <p className="eyebrow">Formulário simulado</p>
-              <h2 id="debt-form-title">Nova dívida demonstrativa</h2>
-            </div>
-            <StatusBadge>Não salva dados</StatusBadge>
-          </div>
-          <div className="form-grid">
-            <label>
-              Nome da dívida
-              <input type="text" value="Compromisso demonstrativo" readOnly />
-            </label>
-            <label>
-              Valor restante
-              <input type="text" value="R$ 800,00" readOnly />
-            </label>
-            <label>
-              Parcela mensal
-              <input type="text" value="R$ 160,00" readOnly />
-            </label>
-            <label>
-              Status
-              <select value="Próximo vencimento" disabled>
-                <option>Próximo vencimento</option>
-              </select>
-            </label>
-          </div>
-          <p className="form-helper">Exemplo visual apenas. Nenhuma informação é armazenada.</p>
+          <div className="section-heading"><div><p className="eyebrow">Formulário simulado</p><h2 id="debt-form-title">{editingId ? 'Editar dívida demonstrativa' : 'Nova dívida demonstrativa'}</h2></div><StatusBadge>Estado local</StatusBadge></div>
+          <form className="form-grid" onSubmit={submitDebt}>
+            <label>Nome da dívida<input type="text" value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} /></label>
+            <label>Categoria<input type="text" value={form.category} onChange={(event) => setForm({ ...form, category: event.target.value })} /></label>
+            <label>Valor total<input type="number" min="0" step="10" value={form.totalAmount} onChange={(event) => setForm({ ...form, totalAmount: Number(event.target.value) })} /></label>
+            <label>Valor restante<input type="number" min="0" step="10" value={form.openAmount} onChange={(event) => setForm({ ...form, openAmount: Number(event.target.value) })} /></label>
+            <label>Parcela mensal<input type="number" min="0" step="10" value={form.installment} onChange={(event) => setForm({ ...form, installment: Number(event.target.value) })} /></label>
+            <label>Vencimento<input type="date" value={form.dueDate} onChange={(event) => setForm({ ...form, dueDate: event.target.value })} /></label>
+            <label>Status<select value={form.status} onChange={(event) => setForm({ ...form, status: event.target.value as DebtStatus })}><option>Em dia</option><option>Próximo vencimento</option><option>Atrasada</option><option>Quitada</option></select></label>
+            <div className="form-actions"><button type="submit">{editingId ? 'Salvar edição simulada' : 'Adicionar simulação'}</button><button className="button button--secondary" type="button" onClick={() => setShowDemoForm(false)}>Cancelar</button></div>
+          </form>
+          <p className="form-helper">Simulação temporária. O ML-Invest não recomenda empréstimos, renegociações ou produtos financeiros.</p>
         </section>
       )}
 
@@ -172,9 +214,9 @@ export function DebtsPage() {
                   <div><dt>Vencimento</dt><dd>{debt.dueDate}</dd></div>
                 </dl>
                 <div className="row-actions">
-                  <button className="button button--secondary" type="button">Editar</button>
-                  <button className="button button--secondary" type="button">Excluir</button>
-                  <button className="button button--secondary" type="button">Marcar como quitada</button>
+                  <button className="button button--secondary" type="button" onClick={() => editDebt(debt)}>Editar</button>
+                  <button className="button button--secondary" type="button" onClick={() => deleteDebt(debt.id)}>Excluir</button>
+                  <button className="button button--secondary" type="button" onClick={() => markDebtAsPaid(debt.id)}>Marcar como quitada</button>
                 </div>
               </article>
             ))}
